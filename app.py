@@ -26,6 +26,11 @@ if "historique" not in st.session_state:
 # --- Interface ---
 st.title("🎮 Jeu d'énigmes avec IA")
 
+# Protection par mot de passe
+password = st.text_input("Mot de passe :", type="password")
+if password != st.secrets["PASSWORD"]:
+    st.stop()
+    
 # Afficher la conversation
 for message in st.session_state.historique:
     if message["role"] == "assistant":
