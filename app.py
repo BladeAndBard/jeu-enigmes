@@ -26,15 +26,18 @@ if "historique" not in st.session_state:
 # --- Interface ---
 st.title("🎮 Jeu d'énigmes avec IA")
 
+# Afficher la conversation
 for message in st.session_state.historique:
     if message["role"] == "assistant":
         st.write("🤖 " + message["content"])
     elif message["role"] == "user" and message["content"] != "Pose-moi une énigme.":
         st.write("👤 " + message["content"])
 
-reponse = st.text_input("Ta réponse :")
-if st.button("Valider"):
-    st.session_state.historique.append({"role": "user", "content": reponse})
-    texte = appeler_claude(st.session_state.historique, system)
-    st.session_state.historique.append({"role": "assistant", "content": texte})
-    st.rerun()
+# Zone de réponse uniquement si une énigme a été posée
+if len(st.session_state.historique) > 0:
+    reponse = st.text_input("Ta réponse :")
+    if st.button("Valider") and reponse:
+        st.session_state.historique.append({"role": "user", "content": reponse})
+        texte = appeler_claude(st.session_state.historique, system)
+        st.session_state.historique.append({"role": "assistant", "content": texte})
+        st.rerun()
